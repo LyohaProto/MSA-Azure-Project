@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Who's that guy?</title>
-        <!--Boostrap's CSS-->
-        <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-        <!--Custom CSS-->
-        <link rel="stylesheet" type="text/css" href="./css/style.css">
-    </head>
-    <body>
-        <div class="container" id="page-container">
-            <h1 id="app-name">
-                <span class="glyphicon glyphicon-film"></span> Who's That Guy?
-            </h1>
-            <!-- NB: glyphicon halflings are generally not free, but the developer made them free in bootstrap -->
 
-            <h2 id="page-header">
-                Identify the actor on a snapshot
-            </h2>
-            <div class="btn-wrapper">
-                <label class="btn btn-default btn-lg" for="my-file-selector">
+<head>
+    <title>Who's that guy?</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./css/bootstrap.css" rel="stylesheet">
+
+    <!--Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+</head>
+
+<body>
+    <div class="container" id="page-container">
+        <h1 id="app-name">
+            <span class="glyphicon glyphicon-film"></span> Who's That Guy?
+        </h1>
+        <!-- NB: glyphicon halflings are generally not free, but the developer made them free in bootstrap -->
+
+        <h2 id="page-header">
+            Identify the actor on a snapshot
+        </h2>
+        <div class="btn-wrapper">
+            <label class="btn btn-default btn-lg" for="my-file-selector">
                     <input id="my-file-selector" type="file">
                     Upload a snapshot
                 </label>
-                <button type="button" class="btn btn-default" id="refreshbtn">Upload another snapshot.</button>
-            </div>
+            <button type="button" class="btn btn-default" id="refreshbtn">Upload another snapshot.</button>
         </div>
-        <!-- 
+    </div>
+    <!-- 
             NB: You generally do not want to publically expose the server structure (eg. ./node_modules/...)
             will sort that in later bootcamps with task-runners and the like.
             For now this is just a demonstration.
@@ -33,11 +38,12 @@
             Alternatively can use CDNs for bootstrap/jquery
         -->
 
-        <!--jQuery Script-->
-        <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-        <!--Bootstrap Script-->
-        <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-        <!--Custom Script-->
-        <script src="./js/actorRecognition.js"></script>
-    </body>
+    <!--jQuery Script-->
+    <script src="./js/jquery.min.js"></script>
+    <!--Bootstrap Script-->
+    <script src="./js/bootstrap.js"></script>
+    <!--Custom Script-->
+    <script src="./js/actorRecognition.js"></script>
+</body>
+
 </html>

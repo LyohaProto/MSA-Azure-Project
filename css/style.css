@@ -21,11 +21,11 @@ button#refreshbtn {
     display:none;
 }
 
-.btn-default {
-   /*background-color: grey;
+/*.btn-default {
+   background-color: grey;
    flood-color:  darkgrey
-      border-color: black;*/
-}
+      border-color: black;
+}*/
 
 img#selected-img{
     width:150px;
