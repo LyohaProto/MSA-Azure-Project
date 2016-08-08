@@ -1,0 +1,56 @@
+html { 
+    background: url("http://www.publicdomainpictures.net/pictures/30000/velka/film-background-1334067869u9d.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+body {
+    color: white;
+    background-color: transparent;
+}
+
+h1#app-name {
+    font-size:84px;
+    color: ivory;
+    text-shadow: 2px 2px 5px black;
+}
+
+button#refreshbtn {
+    display:none;
+}
+
+.btn-default {
+   /*background-color: grey;
+   flood-color:  darkgrey
+      border-color: black;*/
+}
+
+img#selected-img{
+    width:150px;
+    height:150px;
+    padding:20px;
+    display:none;
+    margin: 0 auto;
+}
+
+h2#page-header {
+    padding-top:20px;
+    padding-bottom:20px;
+    text-shadow: 2px 2px 5px black;
+}
+
+body #page-container {
+    margin-top: 150px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.btn-wrapper {
+    padding: 20px 0;
+}
+
+input#my-file-selector {
+    display:none;
+}
