@@ -1,5 +1,5 @@
 html { 
-    background: url("http://www.publicdomainpictures.net/pictures/30000/velka/film-background-1334067869u9d.jpg") no-repeat center center fixed; 
+    background: url("/img/bg.jpg") no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -19,6 +19,11 @@ h1#app-name {
 
 button#refreshbtn {
     display:none;
+    /*padding-bottom: 50px;*/
+}
+
+div#uplprgrsbar {
+    display: none;
 }
 
 /*.btn-default {
