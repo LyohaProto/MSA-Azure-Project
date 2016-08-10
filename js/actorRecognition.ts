@@ -4,7 +4,6 @@ var pageheader = $("#page-header")[0];
 
 // User uploaded the photo
 imgSelector.addEventListener("change", function () {
-    pageheader.innerHTML = "Loading your image..."
     var imageFile = imgSelector.files[0];
     var reader = new FileReader();
 
@@ -13,9 +12,8 @@ imgSelector.addEventListener("change", function () {
             reader.readAsDataURL(imageFile);
             reader.onloadend = imageIsLoaded;
 
-            pageheader.innerHTML = "Identifing the actor..."
+            pageheader.innerHTML = "Identifying the actor..."
             sentImageToProjectoxford(imageFile);
-            console.log("file sent");
         } else {
             console.log("Invalid file");
         }
@@ -44,11 +42,19 @@ function sentImageToProjectoxford(file): void {
     })
         .done(function (data) {
             if (data.length != 0) { // if a face is detected
-                // Get the emotion scores
-                //var scores = data[0].scores;
-                pageheader.innerHTML = "Searching the actors in IMDB..."
-               // var parsed_data = data[0].categories;
+                // var parsed_data = data[0].categories;
+                if (typeof data.categories[0].detail === 'undefined') {
+                    pageheader.innerHTML = "Unfortunately, we cannot identify this picture ¯\\_(ツ)_/¯"
+                    return;
+                }
+
+                if (typeof data.categories[0].detail.celebrities[0] === 'undefined') {
+                    pageheader.innerHTML = "Unfortunately, we cannot identify this actor ¯\\_(ツ)_/¯"
+                    return;
+                }
+
                 pageheader.innerHTML = data.categories[0].detail.celebrities[0].name;
+
             } else {
                 pageheader.innerHTML = "Hmm, we can't detect a human face in that photo. Try another?";
             }
