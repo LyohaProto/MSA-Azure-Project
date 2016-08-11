@@ -1,14 +1,29 @@
-var imgSelector = $("#my-file-selector")[0];
-var imgPreview = $("#myImg")[0];
+// A class for storing all the useful data obtained from MS Cognitive Services API
+var ActorData = (function () {
+    function ActorData(actorName, frX, frY, frW, frH) {
+        this.name = actorName;
+        this.faceRectangleX = frX;
+        this.faceRectangleY = frY;
+        this.faceRectangleWidth = frW;
+        this.faceRectangleHeight = frH;
+    }
+    return ActorData;
+}());
+// Array of all the actors who were recognized on the given photo
+var recognizedActorsData = new Array();
+// Bootstrap elements
+var imgSelector = $("#snapshotPictureFileSelector")[0];
+var uploadButton = $("#openFileButton")[0];
+var imgPreview = $("#uploadedImage")[0];
 var pageheader = $("#page-header")[0];
-// User uploaded the photo
+// User uploaded the snapshot
 imgSelector.addEventListener("change", function () {
     var imageFile = imgSelector.files[0];
     var reader = new FileReader();
     if (imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
         if (imageFile) {
             reader.readAsDataURL(imageFile);
-            reader.onloadend = imageIsLoaded;
+            reader.onloadend = imageIsSelected;
             pageheader.innerHTML = "Identifying the actor...";
             sentImageToProjectoxford(imageFile);
         }
@@ -20,17 +35,18 @@ imgSelector.addEventListener("change", function () {
         alert("Incorrect image.");
     }
 });
-function imageIsLoaded(ev) {
+// Display selected image
+function imageIsSelected(ev) {
     imgPreview.setAttribute('src', ev.target.result);
-    //sentImageToProjectoxford(ev.target.result);
 }
 ;
+// Here all the magic happens :)
 function sentImageToProjectoxford(file) {
     $.ajax({
         url: "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Faces&details=Celebrities",
         beforeSend: function (xhrObj) {
-            // Request headers
             xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
+            // Don't steal my Subscription Key, please!
             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "d78a6d8a8f6540e3868962b00c25f606");
         },
         type: "POST",
@@ -38,20 +54,33 @@ function sentImageToProjectoxford(file) {
         processData: false
     })
         .done(function (data) {
+        //TODO: Is it really needed here?
+        //uploadButton.innerText = "Upload another snapshot";
         if (data.length != 0) {
-            // var parsed_data = data[0].categories;
             if (typeof data.categories[0].detail === 'undefined') {
                 pageheader.innerHTML = "Unfortunately, we cannot identify this picture ¯\\_(ツ)_/¯";
                 return;
             }
-            if (typeof data.categories[0].detail.celebrities[0] === 'undefined') {
-                pageheader.innerHTML = "Unfortunately, we cannot identify this actor ¯\\_(ツ)_/¯";
+            else if (typeof data.categories[0].detail.celebrities === 'undefined' || data.categories[0].detail.celebrities.length === 0) {
+                pageheader.innerHTML = "Unfortunately, we cannot identify any actor on this picture ¯\\_(ツ)_/¯<br>Try to upload another one.";
                 return;
             }
-            pageheader.innerHTML = data.categories[0].detail.celebrities[0].name;
+            // Fill the array with identifyed actors' data.
+            recognizedActorsData = [];
+            data.categories[0].detail.celebrities.forEach(function (element) {
+                recognizedActorsData.push(new ActorData(element.name, element.faceRectangle.left, element.faceRectangle.top, element.faceRectangle.width, element.faceRectangle.height));
+            });
+            // Form a linguistic-friendly list of actors found (one, two or several).
+            pageheader.innerHTML = recognizedActorsData[0].name;
+            if (recognizedActorsData.length > 1) {
+                for (var i = 1; i < recognizedActorsData.length - 1; i++) {
+                    pageheader.innerHTML += ", " + recognizedActorsData[i].name;
+                }
+                pageheader.innerHTML += " and " + recognizedActorsData[recognizedActorsData.length - 1].name;
+            }
         }
         else {
-            pageheader.innerHTML = "Hmm, we can't detect a human face in that photo. Try another?";
+            pageheader.innerHTML = "Unfortunately, we cannot identify this picture ¯\\_(ツ)_/¯";
         }
     })
         .fail(function (error) {
@@ -59,3 +88,22 @@ function sentImageToProjectoxford(file) {
         console.log(error.getAllResponseHeaders());
     });
 }
+/* TODO: Add IMDB integration.
+function GetDataFromIMDB(actorName): void {
+    $.ajax({
+        async: true,
+        crossDomain: true,
+        url: "https://moviesapi.com/m.php?t=" + actorName + "&y=&type=person&r=json",
+        method: "POST",
+        "headers": {
+            "cache-control": "no-cache"
+        }
+    })
+        .done(function (response) {
+            console.log(response);
+        })
+        .fail(function (response) {
+            pageheader.innerHTML = "IMDB error";
+            console.log(response.getAllResponseHeaders());
+        });
+} */ 
