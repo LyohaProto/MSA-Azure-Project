@@ -16,15 +16,16 @@ var imgSelector = $("#snapshotPictureFileSelector")[0];
 var uploadButton = $("#openFileButton")[0];
 var imgPreview = $("#uploadedImage")[0];
 var pageheader = $("#page-header")[0];
+var imageFile;
 // User uploaded the snapshot
 imgSelector.addEventListener("change", function () {
-    var imageFile = imgSelector.files[0];
+    imageFile = imgSelector.files[0];
     var reader = new FileReader();
     if (imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
         if (imageFile) {
             reader.readAsDataURL(imageFile);
             reader.onloadend = imageIsSelected;
-            pageheader.innerHTML = "Identifying the actor...";
+            pageheader.innerHTML = "Analyzing the image...";
             sentImageToProjectoxford(imageFile);
         }
         else {
@@ -40,6 +41,10 @@ function imageIsSelected(ev) {
     imgPreview.setAttribute('src', ev.target.result);
 }
 ;
+// Simple function to replace actors names with links to IMDB search
+function createLinkToIMDB(actorName) {
+    return '<a href="http://www.imdb.com/search/name?name=' + actorName + '" target="_blank">' + actorName + '</a>';
+}
 // Here all the magic happens :)
 function sentImageToProjectoxford(file) {
     $.ajax({
@@ -62,7 +67,7 @@ function sentImageToProjectoxford(file) {
                 return;
             }
             else if (typeof data.categories[0].detail.celebrities === 'undefined' || data.categories[0].detail.celebrities.length === 0) {
-                pageheader.innerHTML = "Unfortunately, we cannot identify any actor on this picture ¯\\_(ツ)_/¯<br>Try to upload another one.";
+                pageheader.innerHTML = "Unfortunately, we cannot identify any actors on this picture ¯\\_(ツ)_/¯<br>Try to upload another one.";
                 return;
             }
             // Fill the array with identifyed actors' data.
@@ -70,13 +75,13 @@ function sentImageToProjectoxford(file) {
             data.categories[0].detail.celebrities.forEach(function (element) {
                 recognizedActorsData.push(new ActorData(element.name, element.faceRectangle.left, element.faceRectangle.top, element.faceRectangle.width, element.faceRectangle.height));
             });
-            // Form a linguistic-friendly list of actors found (one, two or several).
-            pageheader.innerHTML = recognizedActorsData[0].name;
+            // Form a linguistic-friendly list of actors found (one, two or several).            
+            pageheader.innerHTML = createLinkToIMDB(recognizedActorsData[0].name); //recognizedActorsData[0].name;
             if (recognizedActorsData.length > 1) {
                 for (var i = 1; i < recognizedActorsData.length - 1; i++) {
-                    pageheader.innerHTML += ", " + recognizedActorsData[i].name;
+                    pageheader.innerHTML += ", " + createLinkToIMDB(recognizedActorsData[i].name);
                 }
-                pageheader.innerHTML += " and " + recognizedActorsData[recognizedActorsData.length - 1].name;
+                pageheader.innerHTML += " and " + createLinkToIMDB(recognizedActorsData[recognizedActorsData.length - 1].name);
             }
         }
         else {

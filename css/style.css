@@ -17,6 +17,17 @@ h1#app-name {
     text-shadow: 2px 2px 5px black;
 }
 
+a:link {
+    color: ivory;
+}
+
+a:visited {
+    color: ivory;
+}
+
+a:hover {
+    color: darkgrey;
+}
 div#uplprgrsbar {
     display: none;
 }
@@ -34,7 +45,7 @@ body #page-container {
 }
 
 .btn-wrapper {
-    padding: 20px 0;
+    padding: 40px 0;
 }
 
 input#snapshotPictureFileSelector {
