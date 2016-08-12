@@ -19,6 +19,7 @@ var uploadedImageContainer = $("#uploaded-image-container")[0];
 var faceRectanglesLayer = $("#face-rectangles-layer")[0];
 var uploadedImageLayer = $("#uploaded-image-layer")[0];
 var pageheader = $("#page-header")[0];
+//var linkToImdb : HTMLAnchorElement = <HTMLAnchorElement>$("#actor")[0];
 var imageFile;
 var imageScale = 1;
 // User uploaded the snapshot
@@ -61,17 +62,29 @@ function addFaceRectangles() {
     // TODO: understand why I need to double inicialize height of faceRectanglesLayer (it becomes zero othervise)
     faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
     faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px";
+    var id = 0;
     recognizedActorsData.forEach(function (element) {
-        faceRectanglesLayer.innerHTML += '<div style="position:absolute; left:' + (element.faceRectangleX / imageScale) +
+        faceRectanglesLayer.innerHTML += '<div id="faceRectangle-' + id +
+            '" style="position:absolute; left:' + (element.faceRectangleX / imageScale) +
             'px; top:' + (element.faceRectangleY / imageScale) +
             'px; width:' + (element.faceRectangleWidth / imageScale) +
             'px; height:' + (element.faceRectangleHeight / imageScale) +
-            'px; border: 2px solid red;  border-radius: 5px;">';
+            'px; border: 2px none red;  border-radius: 5px;">';
+        // 'px; border: 2px solid red;  border-radius: 5px;" onmouseover="showFaceRectangle(' + id + ')">';           
+        id++;
     });
 }
 // Simple function to replace actors names with links to IMDB search
 function createLinkToIMDB(actorName, id) {
-    return '<a class="actor" data-actor="' + id + '" href="http://www.imdb.com/search/name?name=' + actorName.replace(" ", "%20") + '" target="_blank">' + actorName + '</a>';
+    return '<a class="actor" data-actor="' + id + '" href="http://www.imdb.com/search/name?name=' + actorName.replace(" ", "%20") + '" target="_blank" onmouseover="showFaceRectangle(' + id + ')" onmouseout="hideFaceRectangle(' + id + ')">' + actorName + '</a>';
+}
+function showFaceRectangle(id) {
+    var faceRect = document.getElementById("faceRectangle-" + (id).toString());
+    faceRect.style.borderStyle = "solid";
+}
+function hideFaceRectangle(id) {
+    var faceRect = document.getElementById("faceRectangle-" + (id).toString());
+    faceRect.style.borderStyle = "none";
 }
 // Here all the magic happens :)
 function sentImageToProjectoxford(file) {
@@ -109,12 +122,12 @@ function sentImageToProjectoxford(file) {
             // Add face rectangles
             addFaceRectangles();
             // Form a linguistic-friendly list of actors found (one, two or several).            
-            pageheader.innerHTML = createLinkToIMDB(recognizedActorsData[0].name, 1); //recognizedActorsData[0].name;
+            pageheader.innerHTML = createLinkToIMDB(recognizedActorsData[0].name, 0); //recognizedActorsData[0].name;
             if (recognizedActorsData.length > 1) {
                 for (var i = 1; i < recognizedActorsData.length - 1; i++) {
                     pageheader.innerHTML += ", " + createLinkToIMDB(recognizedActorsData[i].name, i);
                 }
-                pageheader.innerHTML += " and " + createLinkToIMDB(recognizedActorsData[recognizedActorsData.length - 1].name, recognizedActorsData.length);
+                pageheader.innerHTML += " and " + createLinkToIMDB(recognizedActorsData[recognizedActorsData.length - 1].name, recognizedActorsData.length - 1);
             }
         }
         else {
