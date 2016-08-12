@@ -15,8 +15,11 @@ var recognizedActorsData = new Array();
 var imgSelector = $("#snapshotPictureFileSelector")[0];
 var uploadButton = $("#openFileButton")[0];
 var imgPreview = $("#uploadedImage")[0];
+var imgContainer = $("#uploadedImagePreview")[0];
+var faceFramesLayer = $("#faceFramesLayer")[0];
 var pageheader = $("#page-header")[0];
 var imageFile;
+var imageScale = 1;
 // User uploaded the snapshot
 imgSelector.addEventListener("change", function () {
     imageFile = imgSelector.files[0];
@@ -38,12 +41,30 @@ imgSelector.addEventListener("change", function () {
 });
 // Display selected image
 function imageIsSelected(ev) {
+    imgContainer.style.display = "block";
     imgPreview.setAttribute('src', ev.target.result);
+    // Set size of div for face rectangles to match to the uploaded and resized
+    while (faceFramesLayer.firstChild)
+        faceFramesLayer.removeChild(faceFramesLayer.firstChild);
+    faceFramesLayer.style.height = imgPreview.height.toString() + "px";
+    faceFramesLayer.style.width = imgPreview.width.toString() + "px";
 }
 ;
+function addFaceRectangles() {
+    faceFramesLayer.innerHTML = "";
+    faceFramesLayer.style.height = imgPreview.height.toString() + "px";
+    faceFramesLayer.style.width = imgPreview.width.toString() + "px";
+    recognizedActorsData.forEach(function (element) {
+        faceFramesLayer.innerHTML += '<div style="position:absolute; left:' + (element.faceRectangleX / imageScale) +
+            'px; top:' + (element.faceRectangleY / imageScale) +
+            'px; width:' + (element.faceRectangleWidth / imageScale) +
+            'px; height:' + (element.faceRectangleHeight / imageScale) +
+            'px; border: 2px solid red;  border-radius: 5px;">';
+    });
+}
 // Simple function to replace actors names with links to IMDB search
-function createLinkToIMDB(actorName) {
-    return '<a href="http://www.imdb.com/search/name?name=' + actorName + '" target="_blank">' + actorName + '</a>';
+function createLinkToIMDB(actorName, id) {
+    return '<a class="actor" data-actor="' + id + '" href="http://www.imdb.com/search/name?name=' + actorName.replace(" ", "%20") + '" target="_blank">' + actorName + '</a>';
 }
 // Here all the magic happens :)
 function sentImageToProjectoxford(file) {
@@ -70,18 +91,22 @@ function sentImageToProjectoxford(file) {
                 pageheader.innerHTML = "Unfortunately, we cannot identify any actors on this picture ¯\\_(ツ)_/¯<br>Try to upload another one.";
                 return;
             }
+            // Get the image scale
+            imageScale = data.metadata.height / imgPreview.height;
             // Fill the array with identifyed actors' data.
             recognizedActorsData = [];
             data.categories[0].detail.celebrities.forEach(function (element) {
                 recognizedActorsData.push(new ActorData(element.name, element.faceRectangle.left, element.faceRectangle.top, element.faceRectangle.width, element.faceRectangle.height));
             });
+            // Add face rectangles
+            addFaceRectangles();
             // Form a linguistic-friendly list of actors found (one, two or several).            
-            pageheader.innerHTML = createLinkToIMDB(recognizedActorsData[0].name); //recognizedActorsData[0].name;
+            pageheader.innerHTML = createLinkToIMDB(recognizedActorsData[0].name, 1); //recognizedActorsData[0].name;
             if (recognizedActorsData.length > 1) {
                 for (var i = 1; i < recognizedActorsData.length - 1; i++) {
-                    pageheader.innerHTML += ", " + createLinkToIMDB(recognizedActorsData[i].name);
+                    pageheader.innerHTML += ", " + createLinkToIMDB(recognizedActorsData[i].name, i);
                 }
-                pageheader.innerHTML += " and " + createLinkToIMDB(recognizedActorsData[recognizedActorsData.length - 1].name);
+                pageheader.innerHTML += " and " + createLinkToIMDB(recognizedActorsData[recognizedActorsData.length - 1].name, recognizedActorsData.length);
             }
         }
         else {
