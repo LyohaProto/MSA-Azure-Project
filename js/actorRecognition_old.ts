@@ -5,12 +5,12 @@ var pageheader = $("#page-header")[0]; //note the [0], jQuery returns an object,
 var pagecontainer = $("#page-container")[0];
 
 // The html DOM object has been casted to a input element (as defined in index.html) as later we want to get specific fields that are only avaliable from an input element object
-var imgSelector: HTMLInputElement = <HTMLInputElement>$("#my-file-selector")[0];
+var snapshotImageFileSelector: HTMLInputElement = <HTMLInputElement>$("#my-file-selector")[0];
 var refreshbtn = $("#refreshbtn")[0]; //You dont have to use [0], however this just means whenever you use the object you need to refer to it with [0].
 var progressbar = $("#uplprgrsbar")[0];
 
 // Register button listeners
-imgSelector.addEventListener("change", function () { // file has been picked
+snapshotImageFileSelector.addEventListener("change", function () { // file has been picked
     progressbar.style.display = "inline";
     //pageheader.style.display = "none";
     //pageheader.innerHTML = "The snapshot is beind analyzed...";
@@ -33,7 +33,7 @@ refreshbtn.addEventListener("click", function () {
 });
 
 function processImage(callback): void {
-    var file = imgSelector.files[0];  //get(0) is required as imgSelector is a jQuery object so to get the DOM object, its the first item in the object. files[0] refers to the location of the photo we just chose.
+    var file = snapshotImageFileSelector.files[0];  //get(0) is required as imgSelector is a jQuery object so to get the DOM object, its the first item in the object. files[0] refers to the location of the photo we just chose.
     var reader = new FileReader();
     if (file) {
         reader.readAsDataURL(file); //used to read the contents of the file

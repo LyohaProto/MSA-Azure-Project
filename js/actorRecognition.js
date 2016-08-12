@@ -12,17 +12,18 @@ var ActorData = (function () {
 // Array of all the actors who were recognized on the given photo
 var recognizedActorsData = new Array();
 // Bootstrap elements
-var imgSelector = $("#snapshotPictureFileSelector")[0];
-var uploadButton = $("#openFileButton")[0];
-var imgPreview = $("#uploadedImage")[0];
-var imgContainer = $("#uploadedImagePreview")[0];
-var faceFramesLayer = $("#faceFramesLayer")[0];
+var snapshotImageFileSelector = $("#snapshot-image-file-selector")[0];
+var uploadImageButton = $("#upload-image-button")[0];
+var uploadedImage = $("#uploaded-image")[0];
+var uploadedImageContainer = $("#uploaded-image-container")[0];
+var faceRectanglesLayer = $("#face-rectangles-layer")[0];
+var uploadedImageLayer = $("#uploaded-image-layer")[0];
 var pageheader = $("#page-header")[0];
 var imageFile;
 var imageScale = 1;
 // User uploaded the snapshot
-imgSelector.addEventListener("change", function () {
-    imageFile = imgSelector.files[0];
+snapshotImageFileSelector.addEventListener("change", function () {
+    imageFile = snapshotImageFileSelector.files[0];
     var reader = new FileReader();
     if (imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
         if (imageFile) {
@@ -41,21 +42,27 @@ imgSelector.addEventListener("change", function () {
 });
 // Display selected image
 function imageIsSelected(ev) {
-    imgContainer.style.display = "block";
-    imgPreview.setAttribute('src', ev.target.result);
-    // Set size of div for face rectangles to match to the uploaded and resized
-    while (faceFramesLayer.firstChild)
-        faceFramesLayer.removeChild(faceFramesLayer.firstChild);
-    faceFramesLayer.style.height = imgPreview.height.toString() + "px";
-    faceFramesLayer.style.width = imgPreview.width.toString() + "px";
+    // Assigning image element with uploaded image data
+    uploadedImage.setAttribute('src', ev.target.result);
+    // Updating the div that represents image layer
+    uploadedImageLayer.style.top = "-" + uploadedImage.height.toString() + "px";
+    // Clear old face rectangles (if any) and update the size of face rectangles layer div to match the uploaded image
+    while (faceRectanglesLayer.firstChild) {
+        faceRectanglesLayer.removeChild(faceRectanglesLayer.firstChild);
+    }
+    faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
+    //faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px"; //TODO: Why it is Zero ?
+    // Show the main container
+    uploadedImageContainer.style.height = uploadedImage.height.toString() + "px";
+    uploadedImageContainer.style.display = "block";
 }
 ;
 function addFaceRectangles() {
-    faceFramesLayer.innerHTML = "";
-    faceFramesLayer.style.height = imgPreview.height.toString() + "px";
-    faceFramesLayer.style.width = imgPreview.width.toString() + "px";
+    // TODO: understand why I need to double inicialize height of faceRectanglesLayer (it becomes zero othervise)
+    faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
+    faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px";
     recognizedActorsData.forEach(function (element) {
-        faceFramesLayer.innerHTML += '<div style="position:absolute; left:' + (element.faceRectangleX / imageScale) +
+        faceRectanglesLayer.innerHTML += '<div style="position:absolute; left:' + (element.faceRectangleX / imageScale) +
             'px; top:' + (element.faceRectangleY / imageScale) +
             'px; width:' + (element.faceRectangleWidth / imageScale) +
             'px; height:' + (element.faceRectangleHeight / imageScale) +
@@ -92,7 +99,8 @@ function sentImageToProjectoxford(file) {
                 return;
             }
             // Get the image scale
-            imageScale = data.metadata.height / imgPreview.height;
+            // TODO: Get image height from client side
+            imageScale = data.metadata.height / uploadedImage.height;
             // Fill the array with identifyed actors' data.
             recognizedActorsData = [];
             data.categories[0].detail.celebrities.forEach(function (element) {

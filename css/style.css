@@ -12,7 +12,7 @@ body {
 }
 
 h1#app-name {
-    font-size:84px;
+    font-size:72px; /*84 */
     color: ivory;
     text-shadow: 2px 2px 5px black;
 }
@@ -48,6 +48,6 @@ body #page-container {
     padding: 40px 0;
 }
 
-input#snapshotPictureFileSelector {
+input#snapshot-image-file-selector {
     display:none;
 }

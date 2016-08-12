@@ -16,24 +16,23 @@
         <h1 id="app-name">
             <span class="glyphicon glyphicon-film"></span> Who's That Guy?
         </h1>
-        <!-- NB: glyphicon halflings are generally not free, but the developer made them free in bootstrap -->
 
         <h2 id="page-header">
             Identify the actors on a snapshot
         </h2>
 
-        <div id="uploadedImagePreview" style="style=position:relative; height:200px; display:none;">
-            <div id="faceFramesLayer" style="position:relative; margin:auto; z-index:2;">
+        <div id="uploaded-image-container" style="style=position:relative; display:none;">
+            <div id="face-rectangles-layer" style="position:relative; margin:auto; z-index:2;">
                 <!--LAYER 1-->
             </div>
-            <div style="position:relative; top:-200px; z-index:1;">
-                <img id="uploadedImage" height="200">
+            <div id="uploaded-image-layer" style="position:relative; margin:auto; z-index:1;">
+                <img id="uploaded-image" height="240px"> <!--Size of the displayed image must be set here -->
             </div>
         </div>
 
         <div class="btn-wrapper">
-            <label id="openFileButton" class="btn btn-default btn-lg" for="snapshotPictureFileSelector">
-                    <input id="snapshotPictureFileSelector" type="file"/>
+            <label id="upload-image-button" class="btn btn-default btn-lg" for="snapshot-image-file-selector">
+                    <input id="snapshot-image-file-selector" type="file">
                     Upload a snapshot
                 </label>
         </div>
