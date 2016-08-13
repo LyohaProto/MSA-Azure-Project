@@ -85,6 +85,9 @@ function sentImageToProjectoxford(file): void {
         data: file,
         processData: false
     })
+        .progress(function (progress) {
+            console.log(progress);
+        })
         .done(function (data) {
             //TODO: Is it really needed here?
             //uploadButton.innerText = "Upload another snapshot";
@@ -119,7 +122,7 @@ function sentImageToProjectoxford(file): void {
                 addFaceRectangles();
 
                 // Form a linguistic-friendly list of actors found (one, two or several).            
-                pageheader.innerHTML = createLinkToIMDB(recognizedActorsData[0].name, 0); //recognizedActorsData[0].name;
+                pageheader.innerHTML = createLinkToIMDB(recognizedActorsData[0].name, 0);
                 if (recognizedActorsData.length > 1) {
                     for (var i = 1; i < recognizedActorsData.length - 1; i++) {
                         pageheader.innerHTML += ", " + createLinkToIMDB(recognizedActorsData[i].name, i);
@@ -147,27 +150,54 @@ function addFaceRectangles() {
 
     var id: number = 0;
     recognizedActorsData.forEach(element => {
-        faceRectanglesLayer.innerHTML += `<div class="div-face-rectangle" id="faceRectangle-${id}" \
+        faceRectanglesLayer.innerHTML += `<a href="http://www.imdb.com/search/name?name=${element.name.replace(" ", "%20")}" target="_blank">\
+        <div class="div-face-rectangle" id="faceRectangle-${id}" \
         style="left: ${(element.faceRectangleX / imageScale).toFixed(0)}px; \
         top: ${(element.faceRectangleY / imageScale).toFixed(0)}px; \
         width: ${(element.faceRectangleWidth / imageScale).toFixed(0)}px; \
-        height: ${(element.faceRectangleHeight / imageScale).toFixed(0)}px;">`;
-        // border: 2px solid red; border-radius: 5px;" onmouseover="showFaceRectangle(' + id + ')">`;           
+        height: ${(element.faceRectangleHeight / imageScale).toFixed(0)}px;" \
+        onmouseover="highlightActorName(${id})" \
+        onmouseout="dimActorName(${id})"></div></a>`;
         id++;
     });
 }
 
 // Simple function to replace actors names with links to IMDB search and add to each link a function to show face rectangle on mouseover.
 function createLinkToIMDB(actorName: string, id: number): string {
-    return `<a class="actor" data-actor="${id}" href="http://www.imdb.com/search/name?name=${actorName.replace(" ", "%20")}" target="_blank" onmouseover="showFaceRectangle(${id})" onmouseout="hideFaceRectangle(${id})">${actorName}</a>`;
+    return `<a class="actor" id="actor-name-link-${id}" \
+    href="http://www.imdb.com/search/name?name=${actorName.replace(" ", "%20")}" target="_blank" \
+    onmouseover="showFaceRectangle(${id})" \
+    onmouseout="hideFaceRectangle(${id})">\
+    ${actorName}</a>`;
 }
 
+// The following 4 functions are initial solution to bound actors names to thrir faces.
+// TODO: There must be a better solution.
 function showFaceRectangle(id) {
     var faceRect: HTMLDivElement = <HTMLDivElement>document.getElementById(`faceRectangle-${id}`);
     faceRect.style.borderStyle = "solid";
 }
 
 function hideFaceRectangle(id) {
+    var faceRect: HTMLDivElement = <HTMLDivElement>document.getElementById(`faceRectangle-${id}`);
+    faceRect.style.borderStyle = "none";
+}
+
+function highlightActorName(id) {
+    var actorNameLink: HTMLAnchorElement = <HTMLAnchorElement>document.getElementById(`actor-name-link-${id}`);
+    actorNameLink.style.color = "darkgrey";
+    actorNameLink.style.textDecoration = "underline";
+    
+    var faceRect: HTMLDivElement = <HTMLDivElement>document.getElementById(`faceRectangle-${id}`);
+    faceRect.style.borderStyle = "solid";
+}
+
+function dimActorName(id) {
+    var actorNameLink: HTMLAnchorElement = <HTMLAnchorElement>document.getElementById(`actor-name-link-${id}`);
+    // This trick resets CSS value back to default
+    actorNameLink.style.color = "";
+    actorNameLink.style.textDecoration = "";
+
     var faceRect: HTMLDivElement = <HTMLDivElement>document.getElementById(`faceRectangle-${id}`);
     faceRect.style.borderStyle = "none";
 }
