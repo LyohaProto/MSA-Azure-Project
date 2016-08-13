@@ -48,6 +48,12 @@ body #page-container {
     padding: 40px 0;
 }
 
+.div-face-rectangle {
+    position: absolute;
+    border: 2px none red;
+    border-radius: 5px;
+}
+
 input#snapshot-image-file-selector {
     display:none;
 }

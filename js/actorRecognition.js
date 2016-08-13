@@ -20,6 +20,7 @@ var faceRectanglesLayer = $("#face-rectangles-layer")[0];
 var uploadedImageLayer = $("#uploaded-image-layer")[0];
 var pageheader = $("#page-header")[0];
 //var linkToImdb : HTMLAnchorElement = <HTMLAnchorElement>$("#actor")[0];
+//
 var imageFile;
 var imageScale = 1;
 // User uploaded the snapshot
@@ -29,9 +30,9 @@ snapshotImageFileSelector.addEventListener("change", function () {
     if (imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
         if (imageFile) {
             reader.readAsDataURL(imageFile);
+            // When user has selected the image - start to analyze it.
             reader.onloadend = imageIsSelected;
             pageheader.innerHTML = "Analyzing the image...";
-            sentImageToProjectoxford(imageFile);
         }
         else {
             console.log("Invalid file");
@@ -46,46 +47,19 @@ function imageIsSelected(ev) {
     // Assigning image element with uploaded image data
     uploadedImage.setAttribute('src', ev.target.result);
     // Updating the div that represents image layer
-    uploadedImageLayer.style.top = "-" + uploadedImage.height.toString() + "px";
+    uploadedImageLayer.style.top = "-" + uploadedImage.height + "px";
     // Clear old face rectangles (if any) and update the size of face rectangles layer div to match the uploaded image
     while (faceRectanglesLayer.firstChild) {
         faceRectanglesLayer.removeChild(faceRectanglesLayer.firstChild);
     }
-    faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
+    faceRectanglesLayer.style.height = uploadedImage.height + "px";
     //faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px"; //TODO: Why it is Zero ?
     // Show the main container
-    uploadedImageContainer.style.height = uploadedImage.height.toString() + "px";
+    uploadedImageContainer.style.height = uploadedImage.height + "px";
     uploadedImageContainer.style.display = "block";
+    sentImageToProjectoxford(imageFile);
 }
 ;
-function addFaceRectangles() {
-    // TODO: understand why I need to double inicialize height of faceRectanglesLayer (it becomes zero othervise)
-    faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
-    faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px";
-    var id = 0;
-    recognizedActorsData.forEach(function (element) {
-        faceRectanglesLayer.innerHTML += '<div id="faceRectangle-' + id +
-            '" style="position:absolute; left:' + (element.faceRectangleX / imageScale) +
-            'px; top:' + (element.faceRectangleY / imageScale) +
-            'px; width:' + (element.faceRectangleWidth / imageScale) +
-            'px; height:' + (element.faceRectangleHeight / imageScale) +
-            'px; border: 2px none red;  border-radius: 5px;">';
-        // 'px; border: 2px solid red;  border-radius: 5px;" onmouseover="showFaceRectangle(' + id + ')">';           
-        id++;
-    });
-}
-// Simple function to replace actors names with links to IMDB search
-function createLinkToIMDB(actorName, id) {
-    return '<a class="actor" data-actor="' + id + '" href="http://www.imdb.com/search/name?name=' + actorName.replace(" ", "%20") + '" target="_blank" onmouseover="showFaceRectangle(' + id + ')" onmouseout="hideFaceRectangle(' + id + ')">' + actorName + '</a>';
-}
-function showFaceRectangle(id) {
-    var faceRect = document.getElementById("faceRectangle-" + (id).toString());
-    faceRect.style.borderStyle = "solid";
-}
-function hideFaceRectangle(id) {
-    var faceRect = document.getElementById("faceRectangle-" + (id).toString());
-    faceRect.style.borderStyle = "none";
-}
 // Here all the magic happens :)
 function sentImageToProjectoxford(file) {
     $.ajax({
@@ -135,9 +109,32 @@ function sentImageToProjectoxford(file) {
         }
     })
         .fail(function (error) {
-        pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
+        pageheader.innerHTML = "Connection error. Try to refresh the page.";
         console.log(error.getAllResponseHeaders());
     });
+}
+function addFaceRectangles() {
+    // TODO: understand why I need to double inicialize height of faceRectanglesLayer (it becomes zero othervise)
+    faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
+    faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px";
+    var id = 0;
+    recognizedActorsData.forEach(function (element) {
+        faceRectanglesLayer.innerHTML += "<div class=\"div-face-rectangle\" id=\"faceRectangle-" + id + "\"         style=\"left: " + (element.faceRectangleX / imageScale).toFixed(0) + "px;         top: " + (element.faceRectangleY / imageScale).toFixed(0) + "px;         width: " + (element.faceRectangleWidth / imageScale).toFixed(0) + "px;         height: " + (element.faceRectangleHeight / imageScale).toFixed(0) + "px;\">";
+        // border: 2px solid red; border-radius: 5px;" onmouseover="showFaceRectangle(' + id + ')">`;           
+        id++;
+    });
+}
+// Simple function to replace actors names with links to IMDB search and add to each link a function to show face rectangle on mouseover.
+function createLinkToIMDB(actorName, id) {
+    return "<a class=\"actor\" data-actor=\"" + id + "\" href=\"http://www.imdb.com/search/name?name=" + actorName.replace(" ", "%20") + "\" target=\"_blank\" onmouseover=\"showFaceRectangle(" + id + ")\" onmouseout=\"hideFaceRectangle(" + id + ")\">" + actorName + "</a>";
+}
+function showFaceRectangle(id) {
+    var faceRect = document.getElementById("faceRectangle-" + id);
+    faceRect.style.borderStyle = "solid";
+}
+function hideFaceRectangle(id) {
+    var faceRect = document.getElementById("faceRectangle-" + id);
+    faceRect.style.borderStyle = "none";
 }
 /* TODO: Add IMDB integration.
 function GetDataFromIMDB(actorName): void {
