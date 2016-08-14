@@ -1,0 +1,27 @@
+{
+  "name": "Who-Is-That-Guy",
+  "homepage": "https://github.com/LyohaProto/Who-Is-That-Guy",
+  "description": "My project for MSA P1M2. A simple website that uses Microsoft Computer Vision API to identify actors on a snapshot from a movie.",
+  "main": "index.html",
+  "keywords": [
+    "MSA",
+    "actors",
+    "movies",
+    "computer-vision"
+  ],
+  "authors": [
+    "Aleksei Protopopov"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.0"
+  }
+}
