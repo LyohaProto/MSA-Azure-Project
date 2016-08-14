@@ -41,6 +41,3 @@ jspm_packages
 typings
 typings.json
 tsconfig.json
-
-# Bower components
-bower_components
