@@ -11,6 +11,7 @@ body {
     background-color: transparent;
 }
 
+
 h1#app-name {
     font-size:72px; /*84 */
     color: ivory;
@@ -27,9 +28,6 @@ a:visited {
 
 a:hover {
     color: darkgrey;
-}
-div#uplprgrsbar {
-    display: none;
 }
 
 h2#page-header {
@@ -54,6 +52,40 @@ body #page-container {
     border-radius: 5px;
 }
 
+div:face-rectangles-layer {
+    width: 1px;
+    height: 1px;
+}
+
 input#snapshot-image-file-selector {
     display:none;
+}
+
+#about-text {
+    font-size:18px;
+    text-shadow: 1px 1px 2px black; 
+}
+
+img#msa-logo {
+    padding-top:20px;
+    padding-bottom:50px;
+}
+
+h2#about-page-header {
+    font-size:32px;
+    color: ivory;
+    text-shadow: 2px 2px 5px black;
+}
+
+ul#technologies-used {
+ /*   list-style-type: none; */
+    font-size: 16px;
+    text-shadow: 1px 1px 2px black; 
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+    right: 30px;
+    text-shadow: 2px 2px 5px black;
 }

@@ -19,8 +19,6 @@ var uploadedImageContainer = $("#uploaded-image-container")[0];
 var faceRectanglesLayer = $("#face-rectangles-layer")[0];
 var uploadedImageLayer = $("#uploaded-image-layer")[0];
 var pageheader = $("#page-header")[0];
-//var linkToImdb : HTMLAnchorElement = <HTMLAnchorElement>$("#actor")[0];
-//
 var imageFile;
 var imageScale = 1;
 // User uploaded the snapshot
@@ -30,8 +28,13 @@ snapshotImageFileSelector.addEventListener("change", function () {
     if (imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
         if (imageFile) {
             reader.readAsDataURL(imageFile);
-            // When user has selected the image - start to analyze it.
-            reader.onloadend = imageIsSelected;
+            // When user has selected the image and the browser has finished to read it.
+            reader.onloadend = function () {
+                uploadedImage.src = reader.result;
+                uploadedImage.onload = function () {
+                    imageIsSelected();
+                };
+            };
             pageheader.innerHTML = "Analyzing the image...";
         }
         else {
@@ -43,20 +46,25 @@ snapshotImageFileSelector.addEventListener("change", function () {
     }
 });
 // Display selected image
-function imageIsSelected(ev) {
-    // Assigning image element with uploaded image data
-    uploadedImage.setAttribute('src', ev.target.result);
-    // Updating the div that represents image layer
+function imageIsSelected() {
+    // Show "Working..." message
+    $("#uploaded-image").loading({
+        message: 'Working...'
+    });
+    // Updating the size of the div that represents image layer to stay behind the div that represents face rectangles layer
     uploadedImageLayer.style.top = "-" + uploadedImage.height + "px";
-    // Clear old face rectangles (if any) and update the size of face rectangles layer div to match the uploaded image
-    while (faceRectanglesLayer.firstChild) {
-        faceRectanglesLayer.removeChild(faceRectanglesLayer.firstChild);
-    }
-    faceRectanglesLayer.style.height = uploadedImage.height + "px";
-    //faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px"; //TODO: Why it is Zero ?
     // Show the main container
     uploadedImageContainer.style.height = uploadedImage.height + "px";
     uploadedImageContainer.style.display = "block";
+    // Clear old face rectangles (if any)
+    while (faceRectanglesLayer.firstChild) {
+        faceRectanglesLayer.removeChild(faceRectanglesLayer.firstChild);
+    }
+    // Update the size of face rectangles layer div to match the uploaded image
+    faceRectanglesLayer.style.height = uploadedImage.height + "px";
+    faceRectanglesLayer.style.width = uploadedImage.width + "px";
+    console.log(uploadedImage.height + "px - " + uploadedImage.width + "px");
+    // Send image to Microsoft Computer Vision server to recognize actors.
     sentImageToProjectoxford(imageFile);
 }
 ;
@@ -74,11 +82,11 @@ function sentImageToProjectoxford(file) {
         processData: false
     })
         .progress(function (progress) {
-        console.log(progress);
+        console.log("progress");
     })
         .done(function (data) {
-        //TODO: Is it really needed here?
-        //uploadButton.innerText = "Upload another snapshot";
+        // The image processing is finished, hide the "Working.." message.
+        $("#uploaded-image").loading('stop');
         if (data.length != 0) {
             if (typeof data.categories[0].detail === 'undefined') {
                 pageheader.innerHTML = "Unfortunately, we cannot identify this picture ¯\\_(ツ)_/¯";
@@ -117,9 +125,6 @@ function sentImageToProjectoxford(file) {
     });
 }
 function addFaceRectangles() {
-    // TODO: understand why I need to double inicialize height of faceRectanglesLayer (it becomes zero othervise)
-    faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
-    faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px";
     var id = 0;
     recognizedActorsData.forEach(function (element) {
         faceRectanglesLayer.innerHTML += "<a href=\"http://www.imdb.com/search/name?name=" + element.name.replace(" ", "%20") + "\" target=\"_blank\">        <div class=\"div-face-rectangle\" id=\"faceRectangle-" + id + "\"         style=\"left: " + (element.faceRectangleX / imageScale).toFixed(0) + "px;         top: " + (element.faceRectangleY / imageScale).toFixed(0) + "px;         width: " + (element.faceRectangleWidth / imageScale).toFixed(0) + "px;         height: " + (element.faceRectangleHeight / imageScale).toFixed(0) + "px;\"         onmouseover=\"highlightActorName(" + id + ")\"         onmouseout=\"dimActorName(" + id + ")\"></div></a>";

@@ -24,9 +24,7 @@ var uploadedImageContainer: HTMLDivElement = <HTMLDivElement>$("#uploaded-image-
 var faceRectanglesLayer: HTMLDivElement = <HTMLDivElement>$("#face-rectangles-layer")[0];
 var uploadedImageLayer: HTMLDivElement = <HTMLDivElement>$("#uploaded-image-layer")[0];
 var pageheader = $("#page-header")[0];
-//var linkToImdb : HTMLAnchorElement = <HTMLAnchorElement>$("#actor")[0];
 
-//
 var imageFile;
 var imageScale: number = 1;
 
@@ -39,8 +37,14 @@ snapshotImageFileSelector.addEventListener("change", function () {
         if (imageFile) {
             reader.readAsDataURL(imageFile);
 
-            // When user has selected the image - start to analyze it.
-            reader.onloadend = imageIsSelected;
+            // When user has selected the image and the browser has finished to read it.
+            reader.onloadend = function () {
+                uploadedImage.src = reader.result;
+                uploadedImage.onload = function () {
+                    imageIsSelected();
+                };
+            };
+
             pageheader.innerHTML = "Analyzing the image..."
         } else {
             console.log("Invalid file");
@@ -51,24 +55,29 @@ snapshotImageFileSelector.addEventListener("change", function () {
 });
 
 // Display selected image
-function imageIsSelected(ev) {
-    // Assigning image element with uploaded image data
-    uploadedImage.setAttribute('src', ev.target.result);
+function imageIsSelected() {
+    // Show "Working..." message
+    $("#uploaded-image").loading({
+        message: 'Working...'
+    });
 
-    // Updating the div that represents image layer
+    // Updating the size of the div that represents image layer to stay behind the div that represents face rectangles layer
     uploadedImageLayer.style.top = `-${uploadedImage.height}px`;
-
-    // Clear old face rectangles (if any) and update the size of face rectangles layer div to match the uploaded image
-    while (faceRectanglesLayer.firstChild) {
-        faceRectanglesLayer.removeChild(faceRectanglesLayer.firstChild);
-    }
-    faceRectanglesLayer.style.height = `${uploadedImage.height}px`;
-    //faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px"; //TODO: Why it is Zero ?
 
     // Show the main container
     uploadedImageContainer.style.height = `${uploadedImage.height}px`;
     uploadedImageContainer.style.display = "block";
 
+    // Clear old face rectangles (if any)
+    while (faceRectanglesLayer.firstChild) {
+        faceRectanglesLayer.removeChild(faceRectanglesLayer.firstChild);
+    }
+    // Update the size of face rectangles layer div to match the uploaded image
+    faceRectanglesLayer.style.height = `${uploadedImage.height}px`;
+    faceRectanglesLayer.style.width = `${uploadedImage.width}px`;
+    console.log(`${uploadedImage.height}px - ${uploadedImage.width}px`);
+
+    // Send image to Microsoft Computer Vision server to recognize actors.
     sentImageToProjectoxford(imageFile);
 };
 
@@ -86,11 +95,11 @@ function sentImageToProjectoxford(file): void {
         processData: false
     })
         .progress(function (progress) {
-            console.log(progress);
+            console.log("progress");
         })
         .done(function (data) {
-            //TODO: Is it really needed here?
-            //uploadButton.innerText = "Upload another snapshot";
+            // The image processing is finished, hide the "Working.." message.
+            $("#uploaded-image").loading('stop');
 
             if (data.length != 0) { // if server answered with some data
                 if (typeof data.categories[0].detail === 'undefined') { // If nothing at all was recognized
@@ -144,10 +153,6 @@ function sentImageToProjectoxford(file): void {
 }
 
 function addFaceRectangles() {
-    // TODO: understand why I need to double inicialize height of faceRectanglesLayer (it becomes zero othervise)
-    faceRectanglesLayer.style.height = uploadedImage.height.toString() + "px";
-    faceRectanglesLayer.style.width = uploadedImage.width.toString() + "px";
-
     var id: number = 0;
     recognizedActorsData.forEach(element => {
         faceRectanglesLayer.innerHTML += `<a href="http://www.imdb.com/search/name?name=${element.name.replace(" ", "%20")}" target="_blank">\
@@ -187,7 +192,7 @@ function highlightActorName(id) {
     var actorNameLink: HTMLAnchorElement = <HTMLAnchorElement>document.getElementById(`actor-name-link-${id}`);
     actorNameLink.style.color = "darkgrey";
     actorNameLink.style.textDecoration = "underline";
-    
+
     var faceRect: HTMLDivElement = <HTMLDivElement>document.getElementById(`faceRectangle-${id}`);
     faceRect.style.borderStyle = "solid";
 }

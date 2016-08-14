@@ -5,6 +5,7 @@
     <title>Who's that guy?</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./css/jquery.loading.min.css" rel="stylesheet">
     <!-- Bootstrap Core CSS -->
     <link href="./css/bootstrap.css" rel="stylesheet">
     <!--Custom CSS-->
@@ -26,7 +27,8 @@
                 <!--LAYER 1-->
             </div>
             <div id="uploaded-image-layer" style="position:relative; margin:auto; z-index:1;">
-                <img id="uploaded-image" height="240px"> <!--Size of the displayed image must be set here -->
+                <img id="uploaded-image" height="240px">
+                <!--Size of the displayed image must be set here -->
             </div>
         </div>
 
@@ -36,19 +38,18 @@
                     Upload a snapshot
                 </label>
         </div>
-    </div>
-    <!-- 
-            NB: You generally do not want to publically expose the server structure (eg. ./node_modules/...)
-            will sort that in later bootcamps with task-runners and the like.
-            For now this is just a demonstration.
 
-            Alternatively can use CDNs for bootstrap/jquery
-        -->
+        <footer>
+            <p><a href="about.html">About</a></p>
+        </footer>
+    </div>
 
     <!--jQuery Script-->
     <script src="./js/jquery.min.js"></script>
     <!--Bootstrap Script-->
-    <script src="./js/bootstrap.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <!--Loading jQuery Script-->
+    <script src="./js/jquery.loading.min.js"></script>
     <!--Custom Script-->
     <script src="./js/actorRecognition.js"></script>
     <!--Application Insights-->
