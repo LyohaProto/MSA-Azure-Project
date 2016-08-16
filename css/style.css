@@ -1,8 +1,5 @@
 html { 
     background: url("/img/bg.jpg") no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
     background-size: cover;
 }
 
@@ -77,8 +74,16 @@ h2#about-page-header {
     text-shadow: 2px 2px 5px black;
 }
 
+h2#technologies-used {
+    font-size:26px;
+    color: ivory;
+    text-shadow: 2px 2px 5px black;
+}
+
 ul#technologies-used {
  /*   list-style-type: none; */
+    list-style-position: inside;
+    padding: 0px 0px 0px 0px;
     font-size: 16px;
     text-shadow: 1px 1px 2px black; 
 }

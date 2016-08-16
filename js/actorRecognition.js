@@ -63,7 +63,6 @@ function imageIsSelected() {
     // Update the size of face rectangles layer div to match the uploaded image
     faceRectanglesLayer.style.height = uploadedImage.height + "px";
     faceRectanglesLayer.style.width = uploadedImage.width + "px";
-    console.log(uploadedImage.height + "px - " + uploadedImage.width + "px");
     // Send image to Microsoft Computer Vision server to recognize actors.
     sentImageToProjectoxford(imageFile);
 }
@@ -80,9 +79,6 @@ function sentImageToProjectoxford(file) {
         type: "POST",
         data: file,
         processData: false
-    })
-        .progress(function (progress) {
-        console.log("progress");
     })
         .done(function (data) {
         // The image processing is finished, hide the "Working.." message.
@@ -160,22 +156,3 @@ function dimActorName(id) {
     var faceRect = document.getElementById("faceRectangle-" + id);
     faceRect.style.borderStyle = "none";
 }
-/* TODO: Add IMDB integration.
-function GetDataFromIMDB(actorName): void {
-    $.ajax({
-        async: true,
-        crossDomain: true,
-        url: "https://moviesapi.com/m.php?t=" + actorName + "&y=&type=person&r=json",
-        method: "POST",
-        "headers": {
-            "cache-control": "no-cache"
-        }
-    })
-        .done(function (response) {
-            console.log(response);
-        })
-        .fail(function (response) {
-            pageheader.innerHTML = "IMDB error";
-            console.log(response.getAllResponseHeaders());
-        });
-} */ 

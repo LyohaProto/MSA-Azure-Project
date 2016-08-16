@@ -75,7 +75,6 @@ function imageIsSelected() {
     // Update the size of face rectangles layer div to match the uploaded image
     faceRectanglesLayer.style.height = `${uploadedImage.height}px`;
     faceRectanglesLayer.style.width = `${uploadedImage.width}px`;
-    console.log(`${uploadedImage.height}px - ${uploadedImage.width}px`);
 
     // Send image to Microsoft Computer Vision server to recognize actors.
     sentImageToProjectoxford(imageFile);
@@ -94,9 +93,6 @@ function sentImageToProjectoxford(file): void {
         data: file,
         processData: false
     })
-        .progress(function (progress) {
-            console.log("progress");
-        })
         .done(function (data) {
             // The image processing is finished, hide the "Working.." message.
             $("#uploaded-image").loading('stop');
@@ -139,8 +135,7 @@ function sentImageToProjectoxford(file): void {
                     pageheader.innerHTML += " and " + createLinkToIMDB(recognizedActorsData[recognizedActorsData.length - 1].name, recognizedActorsData.length - 1);
                 }
 
-                // TODO: Add IMDB integration.
-                //GetDataFromIMDB(recognizedActorsData[0].name);
+                // TODO: Add deeper IMDB integration.
 
             } else { // if server answered with no data
                 pageheader.innerHTML = "Unfortunately, we cannot identify this picture ¯\\_(ツ)_/¯";
@@ -206,23 +201,3 @@ function dimActorName(id) {
     var faceRect: HTMLDivElement = <HTMLDivElement>document.getElementById(`faceRectangle-${id}`);
     faceRect.style.borderStyle = "none";
 }
-
-/* TODO: Add IMDB integration.
-function GetDataFromIMDB(actorName): void {
-    $.ajax({
-        async: true,
-        crossDomain: true,
-        url: "https://moviesapi.com/m.php?t=" + actorName + "&y=&type=person&r=json",
-        method: "POST",
-        "headers": {
-            "cache-control": "no-cache"
-        }
-    })
-        .done(function (response) {
-            console.log(response);
-        })
-        .fail(function (response) {
-            pageheader.innerHTML = "IMDB error";
-            console.log(response.getAllResponseHeaders());
-        });
-} */
