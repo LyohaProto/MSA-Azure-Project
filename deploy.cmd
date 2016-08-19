@@ -2,7 +2,7 @@ rmdir %DEPLOYMENT_TARGET%\.vscode /s /q
 rmdir %DEPLOYMENT_TARGET%\node_modules /s /q
 rmdir %DEPLOYMENT_TARGET%\src /s /q
 rmdir %DEPLOYMENT_TARGET%\typings /s /q
-del /q %DEPLOYMENT_TARGET%\*
+dir
 
 xcopy %DEPLOYMENT_SOURCE%\dist %DEPLOYMENT_TARGET% /Y /E
 rmdir %DEPLOYMENT_TARGET%\dist
