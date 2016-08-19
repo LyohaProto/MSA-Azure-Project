@@ -1,5 +1,5 @@
-html { 
-    background: url("/img/bg.jpg") no-repeat center center fixed; 
+html {
+    background: url("/img/bg.jpg") no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -8,9 +8,9 @@ body {
     background-color: transparent;
 }
 
-
 h1#app-name {
-    font-size:72px; /*84 */
+    font-size: 72px;
+    /*84 */
     color: ivory;
     text-shadow: 2px 2px 5px black;
 }
@@ -28,8 +28,8 @@ a:hover {
 }
 
 h2#page-header {
-    padding-top:20px;
-    padding-bottom:20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     text-shadow: 2px 2px 5px black;
 }
 
@@ -55,37 +55,37 @@ div:face-rectangles-layer {
 }
 
 input#snapshot-image-file-selector {
-    display:none;
+    display: none;
 }
 
 #about-text {
-    font-size:18px;
-    text-shadow: 1px 1px 2px black; 
+    font-size: 18px;
+    text-shadow: 1px 1px 2px black;
 }
 
 img#msa-logo {
-    padding-top:20px;
-    padding-bottom:50px;
+    padding-top: 20px;
+    padding-bottom: 50px;
 }
 
 h2#about-page-header {
-    font-size:32px;
+    font-size: 32px;
     color: ivory;
     text-shadow: 2px 2px 5px black;
 }
 
 h2#technologies-used {
-    font-size:26px;
+    font-size: 26px;
     color: ivory;
     text-shadow: 2px 2px 5px black;
 }
 
 ul#technologies-used {
- /*   list-style-type: none; */
+    /*   list-style-type: none; */
     list-style-position: inside;
     padding: 0px 0px 0px 0px;
     font-size: 16px;
-    text-shadow: 1px 1px 2px black; 
+    text-shadow: 1px 1px 2px black;
 }
 
 footer {
@@ -94,7 +94,7 @@ footer {
 
 .about-link {
     position: fixed;
-    font-size:14px;
+    font-size: 14px;
     bottom: 15px;
     right: 20px;
 }
@@ -103,4 +103,8 @@ div#jssocials-share-placeholder {
     position: fixed;
     bottom: 10px;
     left: 20px;
+}
+
+.jssocials-shares {
+    font-size: 12px;
 }

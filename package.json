@@ -1,0 +1,38 @@
+{
+  "name": "who-is-that-guy",
+  "version": "1.0.0",
+  "description": "My project for MSA P1M2. A simple website that uses Microsoft Computer Vision API to identify actors on a snapshot from a movie.",
+  "main": "./dist/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "msa",
+    "computer_vision"
+  ],
+  "author": "Aleksei Protopopov",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LyohaProto/Who-Is-That-Guy.git"
+  },
+  "devDependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.0",
+    "jquery-easy-loading": "^1.2.0",
+    "jssocials": "^1.3.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-connect": "^5.0.0",
+    "gulp-imagemin": "^3.0.3",
+    "gulp-jshint": "^2.0.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^2.0.0",
+    "imagemin-pngquant": "^5.0.0",
+    "jshint": "^2.9.3"
+  }
+}
