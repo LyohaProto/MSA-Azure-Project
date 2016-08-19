@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Who's that guy?</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./css/style.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container" id="page-container">
+        <h1 id="app-name">
+            <span class="glyphicon glyphicon-film"></span> Who's That Guy?
+        </h1>
+
+        <h2 id="page-header">
+            Identify the actors on a snapshot
+        </h2>
+
+        <div id="uploaded-image-container" style="style=position:relative; display:none;">
+            <div id="face-rectangles-layer" style="position:relative; margin:auto; z-index:2;">
+                <!--LAYER 1-->
+            </div>
+            <div id="uploaded-image-layer" style="position:relative; margin:auto; z-index:1;">
+                <img id="uploaded-image" height="240px">
+                <!--Size of the displayed image must be set here -->
+            </div>
+        </div>
+
+        <div class="btn-wrapper">
+            <label id="upload-image-button" class="btn btn-default btn-lg" for="snapshot-image-file-selector">
+                    <input id="snapshot-image-file-selector" type="file">
+                        Upload a snapshot
+            </label>
+        </div>
+
+        <footer>
+            <div id="jssocials-share-placeholder"></div>
+            <div class="about-link"><a href="about.html"><span class="glyphicon glyphicon-question-sign"></span> About</a></div>
+        </footer>
+    </div>
+
+    <!--Joined Script-->
+    <script type="text/javascript" src="./js/all.min.js"></script>
+    <!-- jsSocials -->
+    <script>$("#jssocials-share-placeholder").jsSocials({url: "http://whoisthatguy.azurewebsites.net/",
+    text: "Who's that guy? A web service to identify actors on a given snapshot.", shareIn: "popup", showCount: "inside", shares: [{
+        share: "facebook",
+        logo: "./img/fb-logo.png"
+    }, {
+        share: "twitter",
+        logo: "./img/tw-logo.png"
+    }]});</script>
+    <!--Application Insights-->
+    <script type="text/javascript">  var appInsights=window.appInsights||function(config){    function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js";u.getElementsByTagName(o)[0].parentNode.appendChild(s);try{t.cookie=u.cookie}catch(h){}for(t.queue=[],i=["Event","Exception","Metric","PageView","Trace","Dependency"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t    }({        instrumentationKey:"87ccf609-d5bc-47bc-aa0f-d714c5d8b92e"    });           window.appInsights=appInsights;    appInsights.trackPageView();</script>
+</body>
+
+</html>
