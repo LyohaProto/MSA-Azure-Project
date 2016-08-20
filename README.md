@@ -1,5 +1,5 @@
 # Who's That Guy?
-My Azure project for Microsoft Student Accelerator 2016 Phase 1, Module 2: a web service to identify actors on a given snapshot using Microsoft Computer Vision API.
+My Azure project for Microsoft Student Accelerator 2016 Phase 1, Module 2: a web application to identify actors on a given snapshot using Microsoft Computer Vision API.
 
 Technologies used:
 <ul>

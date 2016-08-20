@@ -9,10 +9,15 @@ body {
 }
 
 h1#app-name {
-    font-size: 72px;
-    /*84 */
+    font-size: 5em;
     color: ivory;
     text-shadow: 2px 2px 5px black;
+}
+
+@media screen and (max-width: 700px) {
+    h1#app-name {
+        font-size: 3em;
+    }
 }
 
 a:link {
@@ -28,9 +33,23 @@ a:hover {
 }
 
 h2#page-header {
+    font-size: 2.1em;
     padding-top: 20px;
     padding-bottom: 20px;
     text-shadow: 2px 2px 5px black;
+}
+
+@media screen and (max-width: 700px) {
+    h2#page-header {
+        padding-top: 5px;
+        font-size: 1.7em;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .btn-default {
+        font-size: 1em;
+    }
 }
 
 body #page-container {
@@ -40,7 +59,7 @@ body #page-container {
 }
 
 .btn-wrapper {
-    padding: 40px 0;
+    padding: 40px 0 0 0;
 }
 
 .div-face-rectangle {
@@ -49,9 +68,23 @@ body #page-container {
     border-radius: 5px;
 }
 
-div:face-rectangles-layer {
+div#uploaded-image-container {
+    position:relative;
+    display:none;
+}
+
+div#face-rectangles-layer {
     width: 1px;
     height: 1px;
+    position:relative;
+    margin:auto;
+    z-index:2;
+}
+
+div#uploaded-image-layer {
+    position:relative;
+    margin:auto;
+    z-index:1;
 }
 
 input#snapshot-image-file-selector {

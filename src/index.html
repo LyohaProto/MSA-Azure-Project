@@ -5,24 +5,25 @@
     <title>Who's that guy?</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Web application to identify actors on a given snapshot using Microsoft Computer Vision API">
     <link href="./css/style.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container" id="page-container">
+    <div class="container-fluid" id="page-container">
         <h1 id="app-name">
             <span class="glyphicon glyphicon-film"></span> Who's That Guy?
         </h1>
 
         <h2 id="page-header">
-            Identify the actors on a snapshot
+            Identify actors on a snapshot
         </h2>
 
-        <div id="uploaded-image-container" style="style=position:relative; display:none;">
-            <div id="face-rectangles-layer" style="position:relative; margin:auto; z-index:2;">
+        <div id="uploaded-image-container">
+            <div id="face-rectangles-layer">
                 <!--LAYER 1-->
             </div>
-            <div id="uploaded-image-layer" style="position:relative; margin:auto; z-index:1;">
+            <div id="uploaded-image-layer">
                 <img id="uploaded-image" height="240px">
                 <!--Size of the displayed image must be set here -->
             </div>
