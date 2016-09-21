@@ -4,7 +4,7 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    min-height: 100%;
+    min-height: 100%;    
 }
 
 body {
@@ -21,7 +21,7 @@ h1#app-name {
 
 @media screen and (max-width: 700px) {
     h1#app-name {
-        font-size: 3em;
+        font-size: 2.7em;
     }
 }
 
@@ -44,17 +44,23 @@ h2#page-header {
     text-shadow: 2px 2px 5px black;
 }
 
+.btn-wrapper {
+    padding: 40px 0 0 0;
+}
+
 @media screen and (max-width: 700px) {
     h2#page-header {
         padding-top: 5px;
         font-size: 1.7em;
     }
-}
 
-@media screen and (max-width: 700px) {
     .btn-default {
         font-size: 1em;
     }
+
+    .btn-wrapper {
+    padding: 15px 0 40px 0;
+}
 }
 
 body #page-container {
@@ -63,8 +69,11 @@ body #page-container {
     margin-bottom: 40px;
 }
 
-.btn-wrapper {
-    padding: 40px 0 0 0;
+@media screen and (max-width: 700px) {
+    body #page-container {
+        margin-top: 5px;
+        padding-top: 5px;
+    }
 }
 
 .div-face-rectangle {
@@ -89,7 +98,11 @@ div#face-rectangles-layer {
 div#uploaded-image-layer {
     position:relative;
     margin:auto;
-    z-index:1;
+    z-index:1;    
+}
+
+#uploaded-image {
+    max-width:100%;
 }
 
 input#snapshot-image-file-selector {
