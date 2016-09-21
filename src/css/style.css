@@ -1,15 +1,16 @@
 html {
-    background: url("/img/bg.jpg") no-repeat center center fixed;
+    background: url("/img/bg.jpg") no-repeat center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    min-height: 100ev;
+    min-height: 100%;
 }
 
 body {
     color: white;
     background-color: transparent;
+    min-height: 100%;
 }
 
 h1#app-name {
