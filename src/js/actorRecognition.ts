@@ -61,18 +61,19 @@ function imageIsSelected() {
         message: 'Working...'
     });
 
+    // Show the main container
+    uploadedImageContainer.style.display = "block";
+
+    // Adjust height of the main container
+    uploadedImageContainer.style.height = `${uploadedImage.height}px`;
+
     // Updating the size of the div that represents image layer to stay behind the div that represents face rectangles layer
     uploadedImageLayer.style.top = `-${uploadedImage.height}px`;
 
-    // Show the main container
-    uploadedImageContainer.style.height = `${uploadedImage.height}px`;
-    uploadedImageContainer.style.display = "block";
-
-    // Clear old face rectangles (if any)
+    // Clear old face rectangles (if any) and adjust container's size
     while (faceRectanglesLayer.firstChild) {
         faceRectanglesLayer.removeChild(faceRectanglesLayer.firstChild);
     }
-    // Update the size of face rectangles layer div to match the uploaded image
     faceRectanglesLayer.style.height = `${uploadedImage.height}px`;
     faceRectanglesLayer.style.width = `${uploadedImage.width}px`;
 
@@ -142,6 +143,7 @@ function sentImageToProjectoxford(file): void {
             }
         })
         .fail(function (error) {
+            $("#uploaded-image").loading('stop');
             pageheader.innerHTML = "Connection error. Try to refresh the page.";
             console.log(error.getAllResponseHeaders());
         });

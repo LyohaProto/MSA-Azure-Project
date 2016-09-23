@@ -4,7 +4,7 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    min-height: 100%;    
+    min-height: 100%;
 }
 
 body {
@@ -12,6 +12,7 @@ body {
     background-color: transparent;
     min-height: 100%;
 }
+
 
 h1#app-name {
     font-size: 5em;
@@ -98,11 +99,17 @@ div#face-rectangles-layer {
 div#uploaded-image-layer {
     position:relative;
     margin:auto;
-    z-index:1;    
+    z-index:1;
+}
+
+.object-fit_scale-down {
+  -o-object-fit: scale-down;
+     object-fit: scale-down;
 }
 
 #uploaded-image {
-    max-width:100%;
+    max-height: 240px;
+    max-width: 100%;
 }
 
 input#snapshot-image-file-selector {
