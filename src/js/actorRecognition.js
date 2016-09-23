@@ -21,6 +21,7 @@ var uploadedImageLayer = $("#uploaded-image-layer")[0];
 var pageheader = $("#page-header")[0];
 var imageFile;
 var imageScale = 1;
+var imageOriginalHeight;
 // User uploaded the snapshot
 snapshotImageFileSelector.addEventListener("change", function () {
     imageFile = snapshotImageFileSelector.files[0];
@@ -53,6 +54,14 @@ function imageIsSelected() {
     });
     // Show the main container
     uploadedImageContainer.style.display = "block";
+    // Adjust sizes and positions of elements inside the main container, according to the size of the uploaded image
+    UpdateUploadedImageContainerElements();
+    // Send image to Microsoft Computer Vision server to recognize actors.
+    sentImageToProjectoxford(imageFile);
+}
+;
+// Adjust sizes and positions of elements inside the main container, according to the size of the uploaded image
+function UpdateUploadedImageContainerElements() {
     // Adjust height of the main container
     uploadedImageContainer.style.height = uploadedImage.height + "px";
     // Updating the size of the div that represents image layer to stay behind the div that represents face rectangles layer
@@ -63,10 +72,7 @@ function imageIsSelected() {
     }
     faceRectanglesLayer.style.height = uploadedImage.height + "px";
     faceRectanglesLayer.style.width = uploadedImage.width + "px";
-    // Send image to Microsoft Computer Vision server to recognize actors.
-    sentImageToProjectoxford(imageFile);
 }
-;
 // Here all the magic happens :)
 function sentImageToProjectoxford(file) {
     $.ajax({
@@ -93,8 +99,8 @@ function sentImageToProjectoxford(file) {
                 return;
             }
             // Get the image scale
-            // TODO: Get image height from client side
-            imageScale = data.metadata.height / uploadedImage.height;
+            imageOriginalHeight = data.metadata.height;
+            imageScale = imageOriginalHeight / uploadedImage.height;
             // Fill the array with identifyed actors' data.
             recognizedActorsData = [];
             data.categories[0].detail.celebrities.forEach(function (element) {
@@ -117,7 +123,7 @@ function sentImageToProjectoxford(file) {
     })
         .fail(function (error) {
         $("#uploaded-image").loading('stop');
-        pageheader.innerHTML = "Connection error. Try to refresh the page.";
+        pageheader.innerHTML = "Connection error or the picture is too big.";
         console.log(error.getAllResponseHeaders());
     });
 }
@@ -156,4 +162,16 @@ function dimActorName(id) {
     actorNameLink.style.textDecoration = "";
     var faceRect = document.getElementById("faceRectangle-" + id);
     faceRect.style.borderStyle = "none";
+}
+// Resize the uploaded image and face rectangles in case of the user has changed the browser's size
+window.addEventListener("resize", this.onResize);
+function onResize(event) {
+    if (uploadedImageContainer.style.display == "block") {
+        // Update the image container and layers with face rectangles.
+        UpdateUploadedImageContainerElements();
+        // Update image scale
+        imageScale = imageOriginalHeight / uploadedImage.height;
+        // Draw new, resized face rectangles.
+        addFaceRectangles();
+    }
 }
